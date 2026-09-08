@@ -156,6 +156,11 @@
 
   .tracklist { border-top: 1px solid var(--blue); }
 
+  .spotify-widget {
+    max-width: 480px;
+    margin: 0 auto;
+  }
+  
   .track {
     display: grid;
     grid-template-columns: 36px 1fr;
@@ -270,12 +275,19 @@
     <section class="block" id="lieder">
       <h2 class="block-title">Lieder <span class="fr">— Chansons</span></h2>
 
-      <div class="tracklist">
-        <div class="track"><span class="track-num">01</span><p class="track-title">[Titel des Lieds 1]</p><audio controls src="audio/lied-01.mp3"></audio></div>
-        <div class="track"><span class="track-num">02</span><p class="track-title">[Titel des Lieds 2]</p><audio controls src="audio/lied-02.mp3"></audio></div>
-        <div class="track"><span class="track-num">03</span><p class="track-title">[Titel des Lieds 3]</p><audio controls src="audio/lied-03.mp3"></audio></div>
-        <div class="track"><span class="track-num">04</span><p class="track-title">[Titel des Lieds 4]</p><audio controls src="audio/lied-04.mp3"></audio></div>
-        <div class="track"><span class="track-num">05</span><p class="track-title">[Titel des Lieds 5]</p><audio controls src="audio/lied-05.mp3"></audio></div>
+      <!-- Ersetze die ID unten (der Teil aus deinem Spotify-Link nach "/playlist/" und vor einem eventuellen "?")
+           mit der ID deiner eigenen Playlist. -->
+      <div class="spotify-widget">
+        <iframe
+          src="https://open.spotify.com/embed/playlist/1WYKSgVSJX176Cwlqi2JJX?utm_source=generator&theme=0"
+          width="100%"
+          height="152"
+          style="border-radius: 14px;"
+          frameborder="0"
+          allowfullscreen=""
+          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+          loading="lazy">
+        </iframe>
       </div>
     </section>
 
