@@ -38,7 +38,85 @@
 
   .script { font-family: 'Costa Brisa Script', cursive; }
 
-  /* ---------- Hero (scrollt normal mit der Seite) ---------- */
+  /* ---------- Burger-Menü ---------- */
+
+  .menu-toggle {
+    position: fixed;
+    top: 22px;
+    right: 24px;
+    z-index: 50;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: rgba(255, 253, 249, 0.7);
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    cursor: pointer;
+  }
+
+  .menu-toggle span {
+    display: block;
+    width: 20px;
+    height: 2px;
+    background: var(--navy);
+    border-radius: 2px;
+  }
+
+  .menu-overlay {
+    position: fixed;
+    inset: 0;
+    background: var(--navy);
+    z-index: 60;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 30px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-8px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+  }
+
+  .menu-overlay.open {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0);
+  }
+
+  .menu-close {
+    position: absolute;
+    top: 22px;
+    right: 24px;
+    width: 44px;
+    height: 44px;
+    border: none;
+    background: transparent;
+    color: var(--cream);
+    font-size: 1.6rem;
+    cursor: pointer;
+  }
+
+  .menu-link {
+    background: none;
+    border: none;
+    color: var(--cream);
+    font-family: 'Costa Brisa Sans', sans-serif;
+    font-size: 2.2rem;
+    cursor: pointer;
+    text-align: center;
+  }
+
+  /* ---------- Seiten ---------- */
+
+  .page { display: none; }
+  .page.active { display: block; }
+
+  /* ---------- Hero (unverändert) ---------- */
 
   .hero {
     position: relative;
@@ -160,7 +238,7 @@
     max-width: 480px;
     margin: 0 auto;
   }
-  
+
   .track {
     display: grid;
     grid-template-columns: 36px 1fr;
@@ -201,99 +279,141 @@
     filter: brightness(0.8);
   }
 
+  /* ---------- Seite: Notre Playlist / Photos de nous ---------- */
+
+  .page-simple {
+    min-height: 100vh;
+    padding: 110px 24px 60px;
+  }
+
+  .page-simple .page-inner {
+    max-width: 780px;
+    margin: 0 auto;
+    text-align: center;
+  }
+
   @media (max-width: 640px) {
     .hero { padding: 40px 20px 70px; }
     .greeting .line1 { font-size: 2.1rem; }
     .greeting .line2 { font-size: 2.6rem; }
     .block-title { font-size: 2rem; }
     .block-title .fr { display: block; margin-left: 0; margin-top: 4px; }
+    .menu-link { font-size: 1.8rem; }
   }
 
 </style>
 </head>
 <body>
 
-  <section class="hero">
-    <div id="hero-fade">
-      <!-- Dein eigenes Logo: einfach "logo.png" neben die index.html legen. -->
-      <img class="logo" src="logo.png" alt="Antibes 2026"
-           onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
-      <div class="logo-fallback" id="logo-fallback">
-        <span class="lf-title">Antibes 2026</span>
-        <span class="lf-sub script">école ou?</span>
+  <button class="menu-toggle" id="menu-toggle" aria-label="Menü öffnen">
+    <span></span><span></span><span></span>
+  </button>
+
+  <nav class="menu-overlay" id="menu-overlay">
+    <button class="menu-close" id="menu-close" aria-label="Menü schliessen">✕</button>
+    <button class="menu-link" data-page="start">Start</button>
+    <button class="menu-link" data-page="playlist">Notre Playlist</button>
+    <button class="menu-link" data-page="photos">Photos de nous</button>
+  </nav>
+
+  <!-- ============ Seite 1: Start (Hero + Histoires) ============ -->
+  <div class="page active" id="page-start">
+
+    <section class="hero">
+      <div id="hero-fade">
+        <!-- Dein eigenes Logo: einfach "logo.png" neben die index.html legen. -->
+        <img class="logo" src="logo.png" alt="Antibes 2026"
+             onerror="this.style.display='none'; document.getElementById('logo-fallback').style.display='flex';">
+        <div class="logo-fallback" id="logo-fallback">
+          <span class="lf-title">Antibes 2026</span>
+          <span class="lf-sub script">école ou?</span>
+        </div>
+
+        <div class="greeting">
+          <p class="line1 script">Bonjour ma chérie,</p>
+          <p class="line2">ça va?</p>
+        </div>
       </div>
 
-      <div class="greeting">
-        <p class="line1 script">Bonjour ma chérie,</p>
-        <p class="line2">ça va?</p>
-      </div>
-    </div>
-
-    <div class="scroll-cue">
-      <span>scroll nach unten</span>
-      <span class="arrow">↓</span>
-    </div>
-  </section>
-
-  <svg class="wave" viewBox="0 0 1200 80" preserveAspectRatio="none">
-    <path d="M0,40 C150,90 350,0 600,40 C850,80 1050,0 1200,40 L1200,0 L0,0 Z" fill="var(--blue)"/>
-  </svg>
-
-  <main>
-
-    <section class="block" id="geschichten">
-      <h2 class="block-title">Geschichten <span class="fr">— Histoires</span></h2>
-
-      <div class="tracklist">
-        <div class="track"><span class="track-num">01</span><p class="track-title">[Titel der Geschichte 1]</p><audio controls src="geschichte-01.mp3"></audio></div>
-        <div class="track"><span class="track-num">02</span><p class="track-title">[Titel der Geschichte 2]</p><audio controls src="audio/geschichte-02.mp3"></audio></div>
-        <div class="track"><span class="track-num">03</span><p class="track-title">[Titel der Geschichte 3]</p><audio controls src="audio/geschichte-03.mp3"></audio></div>
-        <div class="track"><span class="track-num">04</span><p class="track-title">[Titel der Geschichte 4]</p><audio controls src="audio/geschichte-04.mp3"></audio></div>
-        <div class="track"><span class="track-num">05</span><p class="track-title">[Titel der Geschichte 5]</p><audio controls src="audio/geschichte-05.mp3"></audio></div>
-        <div class="track"><span class="track-num">06</span><p class="track-title">[Titel der Geschichte 6]</p><audio controls src="audio/geschichte-06.mp3"></audio></div>
-        <div class="track"><span class="track-num">07</span><p class="track-title">[Titel der Geschichte 7]</p><audio controls src="audio/geschichte-07.mp3"></audio></div>
-        <div class="track"><span class="track-num">08</span><p class="track-title">[Titel der Geschichte 8]</p><audio controls src="audio/geschichte-08.mp3"></audio></div>
-        <div class="track"><span class="track-num">09</span><p class="track-title">[Titel der Geschichte 9]</p><audio controls src="audio/geschichte-09.mp3"></audio></div>
-        <div class="track"><span class="track-num">10</span><p class="track-title">[Titel der Geschichte 10]</p><audio controls src="audio/geschichte-10.mp3"></audio></div>
-        <div class="track"><span class="track-num">11</span><p class="track-title">[Titel der Geschichte 11]</p><audio controls src="audio/geschichte-11.mp3"></audio></div>
-        <div class="track"><span class="track-num">12</span><p class="track-title">[Titel der Geschichte 12]</p><audio controls src="audio/geschichte-12.mp3"></audio></div>
-        <div class="track"><span class="track-num">13</span><p class="track-title">[Titel der Geschichte 13]</p><audio controls src="audio/geschichte-13.mp3"></audio></div>
-        <div class="track"><span class="track-num">14</span><p class="track-title">[Titel der Geschichte 14]</p><audio controls src="audio/geschichte-14.mp3"></audio></div>
-        <div class="track"><span class="track-num">15</span><p class="track-title">[Titel der Geschichte 15]</p><audio controls src="audio/geschichte-15.mp3"></audio></div>
-        <div class="track"><span class="track-num">16</span><p class="track-title">[Titel der Geschichte 16]</p><audio controls src="audio/geschichte-16.mp3"></audio></div>
-        <div class="track"><span class="track-num">17</span><p class="track-title">[Titel der Geschichte 17]</p><audio controls src="audio/geschichte-17.mp3"></audio></div>
-        <div class="track"><span class="track-num">18</span><p class="track-title">[Titel der Geschichte 18]</p><audio controls src="audio/geschichte-18.mp3"></audio></div>
-        <div class="track"><span class="track-num">19</span><p class="track-title">[Titel der Geschichte 19]</p><audio controls src="audio/geschichte-19.mp3"></audio></div>
-        <div class="track"><span class="track-num">20</span><p class="track-title">[Titel der Geschichte 20]</p><audio controls src="audio/geschichte-20.mp3"></audio></div>
+      <div class="scroll-cue">
+        <span>scroll nach unten</span>
+        <span class="arrow">↓</span>
       </div>
     </section>
 
-    <svg class="wave" viewBox="0 0 1200 60" preserveAspectRatio="none" style="margin-bottom: 60px;">
-      <path d="M0,30 C200,0 400,60 600,30 C800,0 1000,60 1200,30" fill="none" stroke="var(--blue)" stroke-width="4"/>
+    <svg class="wave" viewBox="0 0 1200 80" preserveAspectRatio="none">
+      <path d="M0,40 C150,90 350,0 600,40 C850,80 1050,0 1200,40 L1200,0 L0,0 Z" fill="var(--blue)"/>
     </svg>
 
-    <section class="block" id="lieder">
-      <h2 class="block-title">Lieder <span class="fr">— Chansons</span></h2>
+    <main>
 
-      <!-- Ersetze die ID unten (der Teil aus deinem Spotify-Link nach "/playlist/" und vor einem eventuellen "?")
-           mit der ID deiner eigenen Playlist. -->
-      <div class="spotify-widget">
-        <iframe
-          src="https://open.spotify.com/embed/playlist/1WYKSgVSJX176Cwlqi2JJX?utm_source=generator&theme=0"
-          width="100%"
-          height="152"
-          style="border-radius: 14px;"
-          frameborder="0"
-          allowfullscreen=""
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
-        </iframe>
+      <section class="block" id="geschichten">
+        <h2 class="block-title">Histoires</h2>
+
+        <div class="tracklist">
+          <div class="track"><span class="track-num">01</span><p class="track-title">[Titel der Geschichte 1]</p><audio controls src="geschichte-01.mp3"></audio></div>
+          <div class="track"><span class="track-num">02</span><p class="track-title">[Titel der Geschichte 2]</p><audio controls src="audio/geschichte-02.mp3"></audio></div>
+          <div class="track"><span class="track-num">03</span><p class="track-title">[Titel der Geschichte 3]</p><audio controls src="audio/geschichte-03.mp3"></audio></div>
+          <div class="track"><span class="track-num">04</span><p class="track-title">[Titel der Geschichte 4]</p><audio controls src="audio/geschichte-04.mp3"></audio></div>
+          <div class="track"><span class="track-num">05</span><p class="track-title">[Titel der Geschichte 5]</p><audio controls src="audio/geschichte-05.mp3"></audio></div>
+          <div class="track"><span class="track-num">06</span><p class="track-title">[Titel der Geschichte 6]</p><audio controls src="audio/geschichte-06.mp3"></audio></div>
+          <div class="track"><span class="track-num">07</span><p class="track-title">[Titel der Geschichte 7]</p><audio controls src="audio/geschichte-07.mp3"></audio></div>
+          <div class="track"><span class="track-num">08</span><p class="track-title">[Titel der Geschichte 8]</p><audio controls src="audio/geschichte-08.mp3"></audio></div>
+          <div class="track"><span class="track-num">09</span><p class="track-title">[Titel der Geschichte 9]</p><audio controls src="audio/geschichte-09.mp3"></audio></div>
+          <div class="track"><span class="track-num">10</span><p class="track-title">[Titel der Geschichte 10]</p><audio controls src="audio/geschichte-10.mp3"></audio></div>
+          <div class="track"><span class="track-num">11</span><p class="track-title">[Titel der Geschichte 11]</p><audio controls src="audio/geschichte-11.mp3"></audio></div>
+          <div class="track"><span class="track-num">12</span><p class="track-title">[Titel der Geschichte 12]</p><audio controls src="audio/geschichte-12.mp3"></audio></div>
+          <div class="track"><span class="track-num">13</span><p class="track-title">[Titel der Geschichte 13]</p><audio controls src="audio/geschichte-13.mp3"></audio></div>
+          <div class="track"><span class="track-num">14</span><p class="track-title">[Titel der Geschichte 14]</p><audio controls src="audio/geschichte-14.mp3"></audio></div>
+          <div class="track"><span class="track-num">15</span><p class="track-title">[Titel der Geschichte 15]</p><audio controls src="audio/geschichte-15.mp3"></audio></div>
+          <div class="track"><span class="track-num">16</span><p class="track-title">[Titel der Geschichte 16]</p><audio controls src="audio/geschichte-16.mp3"></audio></div>
+          <div class="track"><span class="track-num">17</span><p class="track-title">[Titel der Geschichte 17]</p><audio controls src="audio/geschichte-17.mp3"></audio></div>
+          <div class="track"><span class="track-num">18</span><p class="track-title">[Titel der Geschichte 18]</p><audio controls src="audio/geschichte-18.mp3"></audio></div>
+          <div class="track"><span class="track-num">19</span><p class="track-title">[Titel der Geschichte 19]</p><audio controls src="audio/geschichte-19.mp3"></audio></div>
+          <div class="track"><span class="track-num">20</span><p class="track-title">[Titel der Geschichte 20]</p><audio controls src="audio/geschichte-20.mp3"></audio></div>
+        </div>
+      </section>
+
+    </main>
+
+    <footer>Je t'aime</footer>
+
+  </div>
+
+  <!-- ============ Seite 2: Notre Playlist ============ -->
+  <div class="page" id="page-playlist">
+    <div class="page-simple">
+      <div class="page-inner">
+        <h2 class="block-title">Notre Playlist</h2>
+
+        <!-- Ersetze die ID unten (der Teil aus deinem Spotify-Link nach "/playlist/" und vor einem eventuellen "?")
+             mit der ID deiner eigenen Playlist. -->
+        <div class="spotify-widget">
+          <iframe
+            src="https://open.spotify.com/embed/playlist/1WYKSgVSJX176Cwlqi2JJX?utm_source=generator&theme=0"
+            width="100%"
+            height="380"
+            style="border-radius: 14px;"
+            frameborder="0"
+            allowfullscreen=""
+            allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
+            loading="lazy">
+          </iframe>
+        </div>
       </div>
-    </section>
+    </div>
+  </div>
 
-  </main>
-
-  <footer>schlaf gut — dors bien</footer>
+  <!-- ============ Seite 3: Photos de nous ============ -->
+  <div class="page" id="page-photos">
+    <div class="page-simple">
+      <div class="page-inner">
+        <h2 class="block-title">Photos de nous</h2>
+        <!-- Hier später deine Fotos einfügen, z. B.:
+             <img src="photos/bild-01.jpg" alt=""> -->
+      </div>
+    </div>
+  </div>
 
   <script>
     (function () {
@@ -320,6 +440,30 @@
       window.addEventListener('scroll', updateFade, { passive: true });
       window.addEventListener('resize', updateFade);
       updateFade();
+    })();
+
+    (function () {
+      var toggle = document.getElementById('menu-toggle');
+      var overlay = document.getElementById('menu-overlay');
+      var closeBtn = document.getElementById('menu-close');
+      var pages = document.querySelectorAll('.page');
+      var links = document.querySelectorAll('.menu-link');
+
+      function openMenu() { overlay.classList.add('open'); }
+      function closeMenu() { overlay.classList.remove('open'); }
+
+      toggle.addEventListener('click', openMenu);
+      closeBtn.addEventListener('click', closeMenu);
+
+      links.forEach(function (link) {
+        link.addEventListener('click', function () {
+          var target = link.getAttribute('data-page');
+          pages.forEach(function (p) { p.classList.remove('active'); });
+          document.getElementById('page-' + target).classList.add('active');
+          closeMenu();
+          window.scrollTo(0, 0);
+        });
+      });
     })();
   </script>
 
