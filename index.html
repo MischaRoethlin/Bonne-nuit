@@ -157,10 +157,30 @@
   .tracklist { border-top: 1px solid var(--blue); }
 
   .spotify-widget {
-    max-width: 480px;
+    max-width: 260px;
     margin: 0 auto;
   }
-  
+
+  .spotify-cover-link {
+    display: block;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 28px rgba(59, 79, 109, 0.28);
+    transition: transform 0.2s ease;
+  }
+
+  .spotify-cover-link:hover {
+    transform: scale(1.03);
+  }
+
+  .spotify-cover {
+    display: block;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    background: var(--blue);
+  }
+
   .track {
     display: grid;
     grid-template-columns: 36px 1fr;
@@ -275,19 +295,11 @@
     <section class="block" id="lieder">
       <h2 class="block-title">Lieder <span class="fr">— Chansons</span></h2>
 
-      <!-- Ersetze die ID unten (der Teil aus deinem Spotify-Link nach "/playlist/" und vor einem eventuellen "?")
-           mit der ID deiner eigenen Playlist. -->
+      <!-- Trag hier unten bei PLAYLIST_URL im Skript den Link zu deiner eigenen Spotify-Playlist ein. -->
       <div class="spotify-widget">
-        <iframe
-          src="https://open.spotify.com/embed/playlist/1WYKSgVSJX176Cwlqi2JJX?utm_source=generator&theme=0"
-          width="100%"
-          height="152"
-          style="border-radius: 14px;"
-          frameborder="0"
-          allowfullscreen=""
-          allow="autoplay; clipboard-write; encrypted-media; fullscreen; picture-in-picture"
-          loading="lazy">
-        </iframe>
+        <a id="spotify-cover-link" class="spotify-cover-link" href="#" target="_blank" rel="noopener" aria-label="Playlist auf Spotify öffnen">
+          <img id="spotify-cover" class="spotify-cover" alt="Playlist Cover">
+        </a>
       </div>
     </section>
 
@@ -320,6 +332,19 @@
       window.addEventListener('scroll', updateFade, { passive: true });
       window.addEventListener('resize', updateFade);
       updateFade();
+    })();
+
+    (function () {
+      var PLAYLIST_URL = 'https://open.spotify.com/playlist/1WYKSgVSJX176Cwlqi2JJX';
+
+      var link = document.getElementById('spotify-cover-link');
+      var img = document.getElementById('spotify-cover');
+      link.href = PLAYLIST_URL;
+
+      fetch('https://open.spotify.com/oembed?url=' + encodeURIComponent(PLAYLIST_URL))
+        .then(function (res) { return res.json(); })
+        .then(function (data) { img.src = data.thumbnail_url; })
+        .catch(function () { /* falls es nicht klappt, bleibt einfach der blaue Platzhalter sichtbar */ });
     })();
   </script>
 
