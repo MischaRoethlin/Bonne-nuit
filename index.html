@@ -279,7 +279,7 @@
     filter: brightness(0.8);
   }
 
-  /* ---------- Seite: Notre Playlist / Photos de nous ---------- */
+  /* ---------- Seite: Notre Playlist ---------- */
 
   .page-simple {
     min-height: 100vh;
@@ -292,6 +292,39 @@
     text-align: center;
   }
 
+  /* ---------- Seite: Photos de nous ---------- */
+
+  .photos-header {
+    padding: 110px 24px 24px;
+    text-align: center;
+  }
+
+  .photos-scroll {
+    width: 100%;
+    overflow-x: auto;
+    overflow-y: hidden;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .collage-img {
+    display: block;
+    height: 60vh;
+    width: auto;
+    max-width: none;
+  }
+
+  .photos-hint {
+    text-align: center;
+    padding: 18px 0 50px;
+    font-family: system-ui, sans-serif;
+    font-weight: 300;
+    font-size: 0.72rem;
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    color: var(--navy);
+    opacity: 0.55;
+  }
+
   @media (max-width: 640px) {
     .hero { padding: 40px 20px 70px; }
     .greeting .line1 { font-size: 2.1rem; }
@@ -299,6 +332,8 @@
     .block-title { font-size: 2rem; }
     .block-title .fr { display: block; margin-left: 0; margin-top: 4px; }
     .menu-link { font-size: 1.8rem; }
+    .photos-header { padding: 90px 20px 20px; }
+    .collage-img { height: 44vh; }
   }
 
 </style>
@@ -406,13 +441,16 @@
 
   <!-- ============ Seite 3: Photos de nous ============ -->
   <div class="page" id="page-photos">
-    <div class="page-simple">
-      <div class="page-inner">
-        <h2 class="block-title">Photos de nous</h2>
-        <!-- Hier später deine Fotos einfügen, z. B.:
-             <img src="photos/bild-01.jpg" alt=""> -->
-      </div>
+    <div class="photos-header">
+      <h2 class="block-title">Photos de nous</h2>
     </div>
+
+    <!-- Lade "Photo_Collage.png" (dein Bild, 10600x2400px) neben die index.html hoch. -->
+    <div class="photos-scroll">
+      <img src="Photo_Collage.png" alt="Photos de nous" class="collage-img">
+    </div>
+
+    <div class="photos-hint">→ nach rechts scrollen</div>
   </div>
 
   <script>
